@@ -27,7 +27,7 @@ let processedProjects = new Set(); // Track which projects have been fully proce
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async function() {
-  console.log('[Overview] Initializing overview page');
+  console.log('[概览] 初始化概览页面');
     
   // Show the refresh button
   const refreshButton = document.getElementById('refresh-button');
@@ -57,11 +57,11 @@ function startBackgroundUpdates() {
   const projectsWithoutStats = allProjects.filter(p => p.stats === null).length;
     
   if (projectsWithoutStats === 0) {
-    console.log('[Overview] All projects already have stats, no background updates needed');
+    console.log('[概览] 所有项目已有统计数据，无需后台更新');
     return;
   }
     
-  console.log(`[Overview] Starting background updates for ${projectsWithoutStats} projects without stats`);
+  console.log(`[概览] 开始为 ${projectsWithoutStats} 个无统计数据的项目进行后台更新`);
     
   // Check every 2 seconds for updates
   updateCheckInterval = setInterval(checkForProjectUpdates, 2000);
@@ -72,7 +72,7 @@ function startBackgroundUpdates() {
       clearInterval(updateCheckInterval);
       updateCheckInterval = null;
       const stillWithoutStats = allProjects.filter(p => p.stats === null).length;
-      console.log(`[Overview] Stopped checking for background updates. ${stillWithoutStats} projects still without stats.`);
+      console.log(`[概览] 停止检查后台更新。仍有 ${stillWithoutStats} 个项目无统计数据。`);
     }
   }, 60000);
 }
@@ -80,19 +80,19 @@ function startBackgroundUpdates() {
 // Check for project updates
 async function checkForProjectUpdates() {
   try {
-    console.log('[Overview] Checking for project updates...');
+    console.log('[概览] 检查项目更新...');
         
     // Only fetch projects data, not full stats
     const response = await fetch('/api/projects?include_stats=true');
     if (!response.ok) {
-      console.error('[Overview] Failed to fetch projects:', response.status);
+      console.error('[概览] 获取项目失败:', response.status);
       return;
     }
         
     const data = await response.json();
     const updatedProjects = data.projects || [];
         
-    console.log(`[Overview] Received ${updatedProjects.length} projects from API`);
+    console.log(`[概览] 从 API 接收到 ${updatedProjects.length} 个项目`);
         
         
     let hasUpdates = false;
@@ -115,7 +115,7 @@ async function checkForProjectUpdates() {
                 
         // Verify we're matching the correct projects
         if (existingProject.display_name !== updatedProject.display_name) {
-          console.error('[Overview] Project mismatch! Different names:', 
+          console.error('[概览] 项目不匹配！不同的名称:', 
             existingProject.display_name, 'vs', updatedProject.display_name);
         }
                 
@@ -129,8 +129,8 @@ async function checkForProjectUpdates() {
                 
         if (!hadStats && hasStats) {
           // Project stats became available
-          console.log(`[Overview] Stats now available for: ${updatedProject.display_name}`);
-          console.log(`[Overview] Cost: ${actualNewCost}`);
+          console.log(`[概览] 统计数据现已可用: ${updatedProject.display_name}`);
+          console.log(`[概览] 费用: ${actualNewCost}`);
                     
           // Replace the entire project object to ensure clean data
           allProjects[existingProjectIndex] = {
@@ -153,7 +153,7 @@ async function checkForProjectUpdates() {
                     
         } else if (hadStats && hasStats && Math.abs(actualOldCost - actualNewCost) > 0.001) {
           // Stats changed
-          console.log(`[Overview] Stats updated for: ${updatedProject.display_name} (cost: ${actualOldCost} -> ${actualNewCost})`);
+          console.log(`[概览] 统计数据已更新: ${updatedProject.display_name} (费用: ${actualOldCost} -> ${actualNewCost})`);
                     
           // Replace the entire project object to ensure clean data
           allProjects[existingProjectIndex] = {
@@ -183,7 +183,7 @@ async function checkForProjectUpdates() {
         
     // If we have updates, refresh the current page view
     if (hasUpdates) {
-      console.log(`[Overview] Updating table with ${updatedCount} project(s)`);
+      console.log(`[概览] 更新表格，包含 ${updatedCount} 个项目`);
       updateCurrentPageView();
     }
         
@@ -191,24 +191,24 @@ async function checkForProjectUpdates() {
     if (processedProjects.size >= allProjects.length) {
       clearInterval(updateCheckInterval);
       updateCheckInterval = null;
-      console.log('[Overview] All projects have been processed, stopping background updates');
+      console.log('[概览] 所有项目已处理完成，停止后台更新');
     }
         
   } catch (error) {
     // Log errors for debugging
     if (error.message && error.message.includes('Failed to fetch')) {
-      console.warn('[Overview] Server connection lost, stopping background updates');
+      console.warn('[概览] 服务器连接丢失，停止后台更新');
       clearInterval(updateCheckInterval);
       updateCheckInterval = null;
     } else {
-      console.error('[Overview] Background update check failed:', error);
+      console.error('[概览] 后台更新检查失败:', error);
     }
   }
 }
 
 // Update only the currently visible page
 function updateCurrentPageView() {
-  console.log('[Overview] Updating changed rows...');
+  console.log('[概览] 更新已更改的行...');
     
   // Instead of re-rendering the entire table, just update the changed rows
   projectUpdateMap.forEach((wasUpdated, projectPath) => {
@@ -244,15 +244,15 @@ function updateSingleRow(row, project) {
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
         
     if (diffDays === 1) {
-      duration = '1 day';
+      duration = '1 天';
     } else if (diffDays < 30) {
-      duration = `${diffDays} days`;
+      duration = `${diffDays} 天`;
     } else if (diffDays < 365) {
       const months = Math.floor(diffDays / 30);
-      duration = months === 1 ? '1 month' : `${months} months`;
+      duration = months === 1 ? '1 个月' : `${months} 个月`;
     } else {
       const years = Math.floor(diffDays / 365);
-      duration = years === 1 ? '1 year' : `${years} years`;
+      duration = years === 1 ? '1 年' : `${years} 年`;
     }
   }
     
@@ -329,7 +329,7 @@ async function loadProjects(retryCount = 0) {
     const data = await response.json();
     allProjects = data.projects || [];
         
-    console.log(`[Overview] Loaded ${allProjects.length} projects`);
+    console.log(`[概览] 加载了 ${allProjects.length} 个项目`);
         
     // Mark projects that already have stats as processed
     allProjects.forEach(project => {
@@ -343,25 +343,25 @@ async function loadProjects(retryCount = 0) {
         
     // Initialize filtered projects and render table
     filteredProjects = [...allProjects];
-    console.log('[Overview] About to render table after loading projects');
+    console.log('[概览] 加载项目后准备渲染表格');
     renderProjectsTable();
         
     // Calculate quick stats from cached projects
     calculateQuickStats(allProjects);
         
   } catch (error) {
-    console.error('[Overview] Error loading projects:', error);
+    console.error('[概览] 加载项目错误:', error);
         
     // Retry up to 3 times with exponential backoff
     if (retryCount < 3) {
       const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
-      console.log(`[Overview] Retrying in ${delay/1000}s (attempt ${retryCount + 1}/3)...`);
+      console.log(`[概览] ${delay/1000}秒后重试 (第 ${retryCount + 1}/3 次尝试)...`);
             
       setTimeout(() => {
         loadProjects(retryCount + 1);
       }, delay);
     } else {
-      showError('Failed to load projects');
+      showError('加载项目失败');
     }
   }
 }
@@ -397,7 +397,7 @@ function calculateQuickStats(projects) {
     
   // Note if not all projects have stats
   if (projectsWithStats < projects.length) {
-    console.log(`[Overview] Only ${projectsWithStats}/${projects.length} projects have cached stats`);
+    console.log(`[概览] 仅 ${projectsWithStats}/${projects.length} 个项目有缓存统计数据`);
   }
 }
 
@@ -506,10 +506,10 @@ function getProjectSortValue(project, column) {
 // Render projects table with pagination and sorting
 function renderProjectsTable() {
   const tbody = document.getElementById('projects-tbody');
-  console.log(`[Overview] renderProjectsTable called with ${allProjects.length} projects, ${filteredProjects.length} filtered`);
+  console.log(`[概览] renderProjectsTable 被调用，共 ${allProjects.length} 个项目，${filteredProjects.length} 个过滤后`);
     
   if (!tbody) {
-    console.error('[Overview] projects-tbody element not found!');
+    console.error('[概览] 未找到 projects-tbody 元素！');
     return;
   }
     
@@ -518,8 +518,8 @@ function renderProjectsTable() {
             <tr>
                 <td colspan="10">
                     <div class="empty-state">
-                        <h2>No Projects Found</h2>
-                        <p>Start using Claude Code to see your analytics here.</p>
+                        <h2>未找到项目</h2>
+                        <p>开始使用 Claude Code 以查看您的分析数据。</p>
                     </div>
                 </td>
             </tr>
@@ -547,9 +547,9 @@ function renderProjectsTable() {
   // Update project count info
   const countInfo = document.getElementById('project-count-info');
   if (filteredProjects.length !== allProjects.length) {
-    countInfo.textContent = `Showing ${filteredProjects.length} of ${allProjects.length} projects`;
+    countInfo.textContent = `显示 ${filteredProjects.length} / ${allProjects.length} 个项目`;
   } else {
-    countInfo.textContent = `${allProjects.length} projects`;
+    countInfo.textContent = `${allProjects.length} 个项目`;
   }
     
   // Render rows
@@ -568,15 +568,15 @@ function renderProjectsTable() {
       const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
             
       if (diffDays === 1) {
-        duration = '1 day';
+        duration = '1 天';
       } else if (diffDays < 30) {
-        duration = `${diffDays} days`;
+        duration = `${diffDays} 天`;
       } else if (diffDays < 365) {
         const months = Math.floor(diffDays / 30);
-        duration = months === 1 ? '1 month' : `${months} months`;
+        duration = months === 1 ? '1 个月' : `${months} 个月`;
       } else {
         const years = Math.floor(diffDays / 365);
-        duration = years === 1 ? '1 year' : `${years} years`;
+        duration = years === 1 ? '1 年' : `${years} 年`;
       }
     }
         
@@ -662,7 +662,7 @@ async function loadGlobalStats() {
     }
         
     const globalStats = await response.json();
-    console.log('[Overview] Loaded global stats:', globalStats);
+    console.log('[概览] 加载全局统计数据:', globalStats);
         
     // Store configuration
     if (globalStats.config) {
@@ -698,7 +698,7 @@ async function loadGlobalStats() {
         
     // Only render charts if data has changed
     if (currentDataHash !== lastChartDataHash) {
-      console.log('[Overview] Chart data changed, rendering charts');
+      console.log('[概览] 图表数据已更改，渲染图表');
       // Update the full stats reference
       fullGlobalStats = globalStats;
       // Re-render charts with current date range
@@ -713,11 +713,11 @@ async function loadGlobalStats() {
       }
       lastChartDataHash = currentDataHash;
     } else {
-      console.log('[Overview] Chart data unchanged, skipping render');
+      console.log('[概览] 图表数据未更改，跳过渲染');
     }
         
   } catch (error) {
-    console.error('[Overview] Error loading global stats:', error);
+    console.error('[概览] 加载全局统计数据错误:', error);
     // Continue showing data from projects we already loaded
   }
 }
@@ -728,7 +728,7 @@ function startChartUpdates() {
   const projectsWithoutStats = allProjects.filter(p => p.stats === null).length;
     
   if (projectsWithoutStats === 0) {
-    console.log('[Overview] All projects already have stats, no chart updates needed');
+    console.log('[概览] 所有项目已有统计数据，无需图表更新');
     return;
   }
     
@@ -736,7 +736,7 @@ function startChartUpdates() {
   chartUpdateInterval = setInterval(async () => {
     // Check if background updates are still running
     if (!updateCheckInterval) {
-      console.log('[Overview] Background updates stopped, stopping chart updates');
+      console.log('[概览] 后台更新已停止，停止图表更新');
       clearInterval(chartUpdateInterval);
       chartUpdateInterval = null;
       return;
@@ -747,10 +747,10 @@ function startChartUpdates() {
     const projectsBeingProcessed = allProjects.length - processedProjects.size;
         
     if (currentProjectsWithoutStats > 0 || projectsBeingProcessed > 0) {
-      console.log('[Overview] Updating charts with latest data');
+      console.log('[概览] 使用最新数据更新图表');
       await loadGlobalStats();
     } else {
-      console.log('[Overview] All projects processed, stopping chart updates');
+      console.log('[概览] 所有项目已处理，停止图表更新');
       clearInterval(chartUpdateInterval);
       chartUpdateInterval = null;
     }
@@ -801,7 +801,7 @@ function updateGlobalStatsUI(stats) {
   if (stats.total_cost !== undefined) {
     const allTimeCost = stats.total_cost || 0;
     document.getElementById('total-cost-all-time').textContent = 
-            `All-time: ${formatCost(allTimeCost)}`;
+            `总计: ${formatCost(allTimeCost)}`;
   }
     
   // Calculate 30-day total from daily costs - only show if user has >30 days of usage
@@ -809,7 +809,7 @@ function updateGlobalStatsUI(stats) {
   if (cost30Days) {
     if (hasMoreThan30Days && stats.daily_costs) {
       const thirtyDayTotal = stats.daily_costs.reduce((sum, day) => sum + (day.cost || 0), 0);
-      cost30Days.textContent = `30-day: ${formatCost(thirtyDayTotal)}`;
+      cost30Days.textContent = `30天: ${formatCost(thirtyDayTotal)}`;
       cost30Days.style.display = 'inline';
       // Show separator if 30-day is visible
       const separator = cost30Days.previousElementSibling;
@@ -833,8 +833,8 @@ function updateGlobalStatsUI(stats) {
     const inputTokens = stats.total_input_tokens || 0;
     const outputTokens = stats.total_output_tokens || 0;
         
-    allTimeTokens.innerHTML = `All-time: <span class="token-input">${formatNumber(inputTokens)}</span> input • ` +
-            `<span class="token-output">${formatNumber(outputTokens)}</span> output`;
+    allTimeTokens.innerHTML = `总计: <span class="token-input">${formatNumber(inputTokens)}</span> 输入 • ` +
+            `<span class="token-output">${formatNumber(outputTokens)}</span> 输出`;
   }
     
   // 30-day tokens - only show if user has >30 days of usage
@@ -847,8 +847,8 @@ function updateGlobalStatsUI(stats) {
         return acc;
       }, { input: 0, output: 0 });
             
-      tokens30Days.innerHTML = `30-day: <span class="token-input">${formatNumber(thirtyDayTokens.input)}</span> input • ` +
-                `<span class="token-output">${formatNumber(thirtyDayTokens.output)}</span> output`;
+      tokens30Days.innerHTML = `30天: <span class="token-input">${formatNumber(thirtyDayTokens.input)}</span> 输入 • ` +
+                `<span class="token-output">${formatNumber(thirtyDayTokens.output)}</span> 输出`;
       tokens30Days.style.display = 'block';
     } else {
       tokens30Days.style.display = 'none';
@@ -937,9 +937,9 @@ function renderTokenUsageChart(data) {
   // Parse dates directly to avoid timezone issues
   const labels = data.map(d => {
     const [year, month, day] = d.date.split('-');
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
     const monthName = monthNames[parseInt(month) - 1];
-    return `${monthName} ${parseInt(day)}`;
+    return `${monthName}${parseInt(day)}日`;
   });
     
   tokenUsageChart = new Chart(ctx, {
@@ -948,14 +948,14 @@ function renderTokenUsageChart(data) {
       labels: labels,
       datasets: [
         {
-          label: 'Input Tokens',
+          label: '输入令牌',
           data: data.map(d => d.input || 0),
           backgroundColor: 'rgba(102, 126, 234, 0.8)',
           borderColor: 'rgba(102, 126, 234, 1)',
           borderWidth: 1
         },
         {
-          label: 'Output Tokens',
+          label: '输出令牌',
           data: data.map(d => d.output || 0),
           backgroundColor: 'rgba(118, 75, 162, 0.8)',
           borderColor: 'rgba(118, 75, 162, 1)',
@@ -1010,9 +1010,9 @@ function renderCostTrendChart(data) {
   // Parse dates directly to avoid timezone issues
   const labels = data.map(d => {
     const [year, month, day] = d.date.split('-');
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
     const monthName = monthNames[parseInt(month) - 1];
-    return `${monthName} ${parseInt(day)}`;
+    return `${monthName}${parseInt(day)}日`;
   });
   const inputCosts = data.map(d => d.input_cost || 0);
   const outputCosts = data.map(d => d.output_cost || 0);
@@ -1024,19 +1024,19 @@ function renderCostTrendChart(data) {
       labels: labels,
       datasets: [
         {
-          label: 'Input Tokens',
+          label: '输入令牌',
           data: inputCosts,
           backgroundColor: '#667eea',
           stack: 'cost'
         },
         {
-          label: 'Output Tokens',
+          label: '输出令牌',
           data: outputCosts,
           backgroundColor: '#764ba2',
           stack: 'cost'
         },
         {
-          label: 'Cache Operations',
+          label: '缓存操作',
           data: cacheCosts,
           backgroundColor: '#48bb78',
           stack: 'cost'
@@ -1079,7 +1079,7 @@ function renderCostTrendChart(data) {
               tooltipItems.forEach(function(tooltipItem) {
                 sum += tooltipItem.parsed.y;
               });
-              return 'Total: $' + sum.toFixed(4);
+              return '总计: $' + sum.toFixed(4);
             }
           }
         }
@@ -1095,7 +1095,7 @@ function showError(message) {
         <tr>
             <td colspan="9">
                 <div class="empty-state">
-                    <h2>Error</h2>
+                    <h2>错误</h2>
                     <p>${escapeHtml(message)}</p>
                 </div>
             </td>
@@ -1110,10 +1110,10 @@ async function refreshData() {
     
   // Start timing
   const refreshStart = performance.now();
-  console.log('[Overview] 🔄 Starting data refresh...');
+  console.log('[概览] 🔄 开始数据刷新...');
     
   try {
-    button.innerHTML = '⏳ Refreshing...';
+    button.innerHTML = '⏳ 刷新中...';
     button.disabled = true;
         
     // Call the refresh endpoint
@@ -1127,24 +1127,24 @@ async function refreshData() {
     const refreshTime = performance.now() - refreshStart;
         
     if (!response.ok) {
-      throw new Error('Refresh failed');
+      throw new Error('刷新失败');
     }
         
     const result = await response.json();
-    console.log(`[Overview] ✓ Data refreshed in ${refreshTime.toFixed(2)}ms`);
+    console.log(`[概览] ✓ 数据在 ${refreshTime.toFixed(2)}毫秒内刷新完成`);
         
     if (result.files_changed) {
-      console.log('[Overview]   - Files changed: Yes');
-      console.log(`[Overview]   - Projects refreshed: ${result.projects_refreshed || 'N/A'} of ${result.total_projects || 'N/A'}`);
-      button.innerHTML = '✅ Updated!';
+      console.log('[概览]   - 文件已更改: 是');
+      console.log(`[概览]   - 刷新的项目: ${result.projects_refreshed || '无'} / ${result.total_projects || '无'}`);
+      button.innerHTML = '✅ 已更新！';
             
       // Reload the page to show new data
       setTimeout(() => {
         window.location.reload();
       }, 500);
     } else {
-      console.log('[Overview]   - Files changed: No (using cached data)');
-      button.innerHTML = '✅ No changes!';
+      console.log('[概览]   - 文件已更改: 否 (使用缓存数据)');
+      button.innerHTML = '✅ 无变化！';
             
       // Reset button after showing no changes
       setTimeout(() => {
@@ -1155,9 +1155,9 @@ async function refreshData() {
         
   } catch (error) {
     const refreshTime = performance.now() - refreshStart;
-    console.error(`[Overview] ✗ Refresh error after ${refreshTime.toFixed(2)}ms:`, error);
+    console.error(`[概览] ✗ ${refreshTime.toFixed(2)}毫秒后刷新错误:`, error);
         
-    button.innerHTML = '❌ Error!';
+    button.innerHTML = '❌ 错误！';
         
     // Reset button after error
     setTimeout(() => {

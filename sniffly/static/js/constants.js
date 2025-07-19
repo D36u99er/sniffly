@@ -1,8 +1,8 @@
 // Constants for Claude Analytics Dashboard
 
 // User interruption patterns
-const USER_INTERRUPTION_PREFIX = '[Request interrupted by user for tool use]';
-const USER_INTERRUPTION_API_ERROR = 'API Error: Request was aborted.';
+const USER_INTERRUPTION_PREFIX = '[用户在工具使用时中断请求]';
+const USER_INTERRUPTION_API_ERROR = 'API 错误：请求被中止。';
 const USER_INTERRUPTION_PATTERNS = [
   USER_INTERRUPTION_PREFIX,
   USER_INTERRUPTION_API_ERROR
@@ -24,9 +24,9 @@ const CHART_COLORS = {
 
 // Claude logs location info
 const CLAUDE_LOGS_TOOLTIP = `<div class="example">
-    <strong>Example:</strong><br>
-    Project: /Users/john/dev/myapp<br>
-    Logs at: ~/.claude/projects/-Users-john-dev-myapp/
+    <strong>示例：</strong><br>
+    项目：/Users/john/dev/myapp<br>
+    日志位置：~/.claude/projects/-Users-john-dev-myapp/
 </div>`;
 
 // Export for use in other scripts

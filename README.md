@@ -1,60 +1,60 @@
-# Sniffly - Claude Code Analytics Dashboard
+# Sniffly - Claude Code 分析仪表板
 
-Analyze Claude Code logs to help you use Claude Code better.
+分析 Claude Code 日志，帮助您更好地使用 Claude Code。
 
-* [Website](https://sniffly.dev)
-* [Quickstart](#-quickstart)
-* [Features](#-features)
-* [Sharable dashboard](#-sharing-your-dashboard)
+* [官网](https://sniffly.dev)
+* [快速开始](#-快速开始)
+* [功能特性](#-功能特性)
+* [可分享的仪表板](#-分享您的仪表板)
 
-## 📊 Features
-### Understanding your usage patterns
+## 📊 功能特性
+### 了解您的使用模式
 <center>
 <img src="assets/features/stats.png" width="800" />
 </center>
 
-### Error breakdown
-_See where Claude Code makes mistakes so that you avoid these mistakes._
+### 错误分析
+_查看 Claude Code 在哪里犯错，以便您避免这些错误。_
 
 <center>
 <img src="assets/features/error-type.png" width="500" />
 </center>
 
-### Message history analysis
-_Walk through all your instructions and share them with your coworkers if needed._
+### 消息历史分析
+_浏览您的所有指令，并在需要时与同事分享。_
 
 <center>
 <img src="assets/features/command-walkthrough.png" width="1000" />
 </center>
 
 
-## 🚀 Quickstart
-- Requirement: Python 3.10+
+## 🚀 快速开始
+- 需求：Python 3.10+
 
-### With UV (recommended)
-Make sure you have `uv` installed! https://github.com/astral-sh/uv
+### 使用 UV（推荐）
+确保您已安装 `uv`！https://github.com/astral-sh/uv
 
 ```bash
-# One-time execution (no installation needed)
+# 一次性执行（无需安装）
 uvx sniffly@latest init
 ```
 
 ```bash
-# Install the package
+# 安装软件包
 uv tool install sniffly@latest
 sniffly init
 ```
 
-After running `sniffly init`, access your dashboard at http://localhost:8081 (or whichever port you choose).
+运行 `sniffly init` 后，在 http://localhost:8081（或您选择的任何端口）访问您的仪表板。
 
-### With pip
+### 使用 pip
 
 ```bash
 pip install sniffly
 sniffly init
 ```
 
-### From source
+### 从源代码安装
 ```bash
 git clone https://github.com/chiphuyen/sniffly.git
 cd sniffly
@@ -62,102 +62,102 @@ pip install -e .
 sniffly init
 ```
 
-## 🔧 Configuration
+## 🔧 配置
 
-### Common Settings
+### 常用设置
 
 ```bash
-# Change port (default: 8081)
+# 更改端口（默认：8081）
 sniffly config set port 8090
 
-# Disable auto-opening browser
+# 禁用自动打开浏览器
 sniffly config set auto_browser false
 
-# Show current configuration
+# 显示当前配置
 sniffly config show
 ```
 
-### All Configuration Options
+### 所有配置选项
 
-| Key | Default | Description |
+| 键 | 默认值 | 描述 |
 |-----|---------|-------------|
-| `port` | 8081 | Server port |
-| `host` | 127.0.0.1 | Server host |
-| `auto_browser` | true | Auto-open browser on start |
-| `cache_max_projects` | 5 | Max projects in memory cache |
-| `cache_max_mb_per_project` | 500 | Max MB per project |
-| `messages_initial_load` | 500 | Initial messages to load |
-| `max_date_range_days` | 30 | Max days for date range selection |
+| `port` | 8081 | 服务器端口 |
+| `host` | 127.0.0.1 | 服务器主机 |
+| `auto_browser` | true | 启动时自动打开浏览器 |
+| `cache_max_projects` | 5 | 内存缓存中的最大项目数 |
+| `cache_max_mb_per_project` | 500 | 每个项目的最大 MB 数 |
+| `messages_initial_load` | 500 | 初始加载的消息数 |
+| `max_date_range_days` | 30 | 日期范围选择的最大天数 |
 
-See full [CLI Reference](docs/cli-reference.md) for all options and commands.
+查看完整的 [CLI 参考](docs/cli-reference.md) 以了解所有选项和命令。
 
 
-## 💡 Sharing Your Dashboard
-You can create a link to share your project's stats and instructions with your coworkers.
+## 💡 分享您的仪表板
+您可以创建一个链接来与同事分享您项目的统计数据和指令。
 
-1. Click the "📤 Share" button in your dashboard
-2. Choose privacy options:
-   - **Private**: Only people with the link can view
-   - **Public**: Listed in the public gallery
-   - **Include Commands**: Share your actual command text
-3. Copy and share the generated link
+1. 点击仪表板中的“📤 分享”按钮
+2. 选择隐私选项：
+   - **私密**：仅拥有链接的人可以查看
+   - **公开**：在公开展示中列出
+   - **包含命令**：分享您的实际命令文本
+3. 复制并分享生成的链接
 
-## 🚨 Troubleshooting
+## 🚨 故障排除
 
-### Common Issues
+### 常见问题
 
 ```bash
 sniffly help
 ```
 
-**Port already in use?**
+**端口已被占用？**
 ```bash
-# Use a different port
+# 使用不同的端口
 sniffly init --port 8090
 
-# Or change default
+# 或更改默认值
 sniffly config set port 8090
 ```
 
-**Browser doesn't open?**
+**浏览器没有打开？**
 ```bash
-# Check setting
+# 检查设置
 sniffly config show
 
-# Enable auto-browser
+# 启用自动打开浏览器
 sniffly config set auto_browser true
 
-# Or manually visit http://localhost:8081
+# 或手动访问 http://localhost:8081
 ```
 
-**Configuration issues?**
+**配置问题？**
 ```bash
-# View all settings and their sources
+# 查看所有设置及其来源
 sniffly config show
 
-# Reset a setting to default
+# 将设置重置为默认值
 sniffly config unset port
 
-# Remove all custom config
+# 删除所有自定义配置
 rm ~/.sniffly/config.json
 ```
 
-For more issues, see [GitHub Issues](https://github.com/chiphuyen/sniffly/issues).
+更多问题，请参阅 [GitHub Issues](https://github.com/chiphuyen/sniffly/issues)。
 
-## 🔐 Privacy
+## 🔐 隐私
 
-Sniffly runs entirely on your local machine:
-- ✅ All data processing happens locally
-- ✅ No telemetry
-- ✅ Your conversations never leave your computer
-- ✅ Shared dashboards are opt-in only
+Sniffly 完全在您的本地机器上运行：
+- ✅ 所有数据处理都在本地进行
+- ✅ 无遥测
+- ✅ 您的对话永远不会离开您的计算机
+- ✅ 共享仪表板仅在您选择后才会启用
 
-## 📄 License
+## 📄 许可证
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT 许可证 - 请参阅 [LICENSE](LICENSE) 文件。
 
-## 🔗 Links
+## 🔗 链接
 
-- **Homepage**: [sniffly.dev](https://sniffly.dev)
-- **Documentation**: [Full CLI Reference](docs/cli-reference.md)
-- **Issues**: [GitHub Issues](https://github.com/chiphuyen/sniffly/issues)
+- **主页**：[sniffly.dev](https://sniffly.dev)
+- **文档**：[完整 CLI 参考](docs/cli-reference.md)
+- **问题**：[GitHub Issues](https://github.com/chiphuyen/sniffly/issues)

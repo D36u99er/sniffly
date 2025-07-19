@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claude Code Analytics - Overview</title>
+    <title>Claude Code 分析 - 概览</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/static/css/dashboard.css">
     <link rel="stylesheet" href="/static/css/date-range-picker.css">
@@ -92,11 +92,11 @@
                 <div>
                     <h1>
                         <span class="brand-name" onclick="window.location.href='/'" style="cursor: pointer;">Sniffly</span>
-                        <span class="header-subtitle">Claude Code Analytics</span>
+                        <span class="header-subtitle">Claude Code 数据分析</span>
                     </h1>
                     <div id="project-info">
                         <p id="project-info-text">
-                            <span id="project-count">--</span> projects since <span id="first-use-header">--</span>
+                            <span id="project-count">--</span> 个项目，自 <span id="first-use-header">--</span> 开始
                         </p>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
         </div>
         <div class="header-controls">
             <button id="refresh-button" onclick="refreshData()" class="btn-header">
-                🔄 Refresh
+                🔄 刷新
             </button>
         </div>
     </div>
@@ -114,19 +114,19 @@
         <div class="table-container">
             <div class="table-header">
                 <div>
-                    <h2>Projects</h2>
+                    <h2>项目</h2>
                     <div class="table-info">
-                        <span id="project-count-info">Loading...</span>
+                        <span id="project-count-info">加载中...</span>
                     </div>
                 </div>
                 <div class="table-controls">
                     <div class="filter-group">
-                        <label>Search:</label>
-                        <input type="text" id="projects-search" placeholder="Search projects..." 
+                        <label>搜索：</label>
+                        <input type="text" id="projects-search" placeholder="搜索项目..." 
                             oninput="filterProjects()" class="filter-search">
                     </div>
                     <div class="filter-group">
-                        <label>Per page:</label>
+                        <label>每页：</label>
                         <select id="projects-per-page" onchange="updateProjectsPerPage()">
                             <option value="10" selected>10</option>
                             <option value="20">20</option>
@@ -141,95 +141,95 @@
                 <table class="data-table" id="projects-table">
                     <thead>
                         <tr>
-                            <th onclick="sortProjectsTable('display_name')" class="sortable">Project</th>
-                            <th onclick="sortProjectsTable('last_modified')" class="sortable sort-desc">Last Active</th>
-                            <th onclick="sortProjectsTable('duration')" class="sortable">Duration</th>
-                            <th onclick="sortProjectsTable('cost')" class="sortable">Cost
+                            <th onclick="sortProjectsTable('display_name')" class="sortable">项目</th>
+                            <th onclick="sortProjectsTable('last_modified')" class="sortable sort-desc">最后活动</th>
+                            <th onclick="sortProjectsTable('duration')" class="sortable">持续时间</th>
+                            <th onclick="sortProjectsTable('cost')" class="sortable">成本
                                 <span class="tooltip-info-icon"
                                       onmouseover="showTooltip('overview-cost-tooltip')" 
                                       onmouseout="hideTooltip('overview-cost-tooltip')">ⓘ</span>
                                 <div id="overview-cost-tooltip" class="tooltip-dark position-below tooltip-sm">
                                     <div style="font-size: 0.85rem; line-height: 1.4;">
-                                        What you would've paid if you were<br>using the Claude API directly.
+                                        如果您直接使用 Claude API<br>您将支付的费用。
                                     </div>
                                     <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.5rem;">
-                                        Based on current token prices from LiteLLM
+                                        基于 LiteLLM 的当前令牌价格
                                     </div>
                                 </div>
                             </th>
-                            <th onclick="sortProjectsTable('commands')" class="sortable">Commands
+                            <th onclick="sortProjectsTable('commands')" class="sortable">命令
                                 <span class="tooltip-info-icon"
                                       onmouseover="showTooltip('overview-commands-tooltip')" 
                                       onmouseout="hideTooltip('overview-commands-tooltip')">ⓘ</span>
                                 <div id="overview-commands-tooltip" class="tooltip-dark position-below tooltip-sm">
-                                    User instructions
+                                    用户指令
                                 </div>
                             </th>
-                            <th onclick="sortProjectsTable('tokens_per_cmd')" class="sortable">Tokens/Cmd</th>
-                            <th onclick="sortProjectsTable('steps_per_cmd')" class="sortable">Steps/Cmd
+                            <th onclick="sortProjectsTable('tokens_per_cmd')" class="sortable">令牌/命令</th>
+                            <th onclick="sortProjectsTable('steps_per_cmd')" class="sortable">步骤/命令
                                 <span class="tooltip-info-icon"
                                       onmouseover="showTooltip('overview-steps-tooltip')" 
                                       onmouseout="hideTooltip('overview-steps-tooltip')">ⓘ</span>
                                 <div id="overview-steps-tooltip" class="tooltip-dark position-below tooltip-sm">
-                                    Average number of steps per user command
+                                    每个用户命令的平均步骤数
                                 </div>
                             </th>
-                            <th onclick="sortProjectsTable('cmds_per_context')" class="sortable">Cmds/Context
+                            <th onclick="sortProjectsTable('cmds_per_context')" class="sortable">命令/上下文
                                 <span class="tooltip-info-icon"
                                       onmouseover="showTooltip('overview-context-tooltip')" 
                                       onmouseout="hideTooltip('overview-context-tooltip')">ⓘ</span>
                                 <div id="overview-context-tooltip" class="tooltip-dark position-below tooltip-sm">
-                                    Average commands before context window fills up
+                                    上下文窗口填满前的平均命令数
                                 </div>
                             </th>
-                            <th onclick="sortProjectsTable('books')" class="sortable">Books
+                            <th onclick="sortProjectsTable('books')" class="sortable">书籍
                                 <span class="tooltip-info-icon"
                                       onmouseover="showTooltip('overview-books-tooltip')" 
                                       onmouseout="hideTooltip('overview-books-tooltip')">ⓘ</span>
                                 <div id="overview-books-tooltip" class="tooltip-dark position-below tooltip-sm">
-                                    The number of books you could've written.<br>
-                                    Assuming 60k words/book.
+                                    您本可以写的书籍数量。<br>
+                                    假设每本书 60k 字。
                                 </div>
                             </th>
-                            <th>Status</th>
+                            <th>状态</th>
                         </tr>
                     </thead>
                     <tbody id="projects-tbody">
                         <tr>
-                            <td colspan="10" class="table-loading">Loading projects...</td>
+                            <td colspan="10" class="table-loading">正在加载项目...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             
             <div class="table-pagination" id="projects-pagination" style="display: none;">
-                <button onclick="changeProjectsPage(-1)" id="projects-prev-btn">Previous</button>
+                <button onclick="changeProjectsPage(-1)" id="projects-prev-btn">上一页</button>
                 <div class="page-info">
-                    Page <input type="number" id="projects-page-input" value="1" onchange="goToProjectsPage()">
-                    of <span id="projects-total-pages">1</span>
+                    第 <input type="number" id="projects-page-input" value="1" onchange="goToProjectsPage()">
+                    页，共 <span id="projects-total-pages">1</span> 页
                 </div>
-                <button onclick="changeProjectsPage(1)" id="projects-next-btn">Next</button>
+                <button onclick="changeProjectsPage(1)" id="projects-next-btn">下一页</button>
             </div>
         </div>
         
         <!-- Charts Section -->
         <div class="charts-section">
             <div class="chart-container">
-                <h2>Token Usage</h2>
+                <h2>令牌使用量</h2>
                 <div class="chart-subtitle" id="token-summary">
-                    <div id="token-all-time">All-time: <span class="token-input">0</span> input • <span class="token-output">0</span> output</div>
-                    <div id="token-30-days">30-day: <span class="token-input">0</span> input • <span class="token-output">0</span> output</div>
+                    <div id="token-all-time">全部时间：<span class="token-input">0</span> 输入 • <span class="token-output">0</span> 输出</div>
+                    <div id="token-30-days">30 天：<span class="token-input">0</span> 输入 • <span class="token-output">0</span> 输出</div>
                 </div>
                 <div id="overview-token-date-picker" class="date-range-picker-compact"></div>
                 <canvas id="token-usage-chart"></canvas>
             </div>
             
             <div class="chart-container">
-                <h2>Direct API Cost</h2>
+                <h2>直接 API 成本</h2>
                 <div class="chart-subtitle" id="cost-summary">
-                    <span id="total-cost-all-time">All-time: $0.00</span>
+                    <span id="total-cost-all-time">全部时间：$0.00</span>
                     <span class="separator">•</span>
-                    <span id="total-cost-30-days">30-day: $0.00</span>
+                    <span id="total-cost-30-days">30 天：$0.00</span>
                 </div>
                 <div id="overview-cost-date-picker" class="date-range-picker-compact"></div>
                 <canvas id="cost-trend-chart"></canvas>

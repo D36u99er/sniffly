@@ -50,8 +50,8 @@ except importlib.metadata.PackageNotFoundError:
 
 # Create FastAPI app
 app = FastAPI(
-    title="Claude Analytics Dashboard - Local Mode",
-    description="Analyze your Claude AI logs directly from your local machine",
+    title="Claude 分析仪表板 - 本地模式",
+    description="直接从您的本地机器分析您的 Claude AI 日志",
     version=__version__,
 )
 
